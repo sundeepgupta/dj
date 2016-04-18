@@ -1,9 +1,32 @@
+/*
+ Love Yourself
+ Stressed Out
+ Work
+*/
+
+
 enum Mode {
     case Normal
     case RepeatEach
     case RepeatAll
 }
 
+class RepeatEachMode {
+    func newSongs(songs: [String]) -> [String] {
+        var repeated = [String]()
+        for song in songs {
+            repeated.append(song)
+            repeated.append(song)
+        }
+        return repeated
+    }
+}
+
+class RepeatAllMode {
+    func newSongs(songs: [String]) -> [String] {
+        return songs + songs
+    }
+}
 
 class Jukebox {
     private var songs = [
@@ -18,16 +41,10 @@ class Jukebox {
             break
             
         case .RepeatEach:
-            var newSongs = [String]()
-            for song in self.songs {
-                newSongs.append(song)
-                newSongs.append(song)
-            }
-            self.songs = newSongs
+            self.songs = RepeatEachMode().newSongs(self.songs)
             
         case .RepeatAll:
-            self.songs = self.songs + self.songs
-            
+            self.songs = RepeatAllMode().newSongs(self.songs)
         }
         
         return self.songs.joinWithSeparator("\n")
