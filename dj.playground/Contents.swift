@@ -1,18 +1,25 @@
-/*
- Love Yourself
- Stressed Out
- Work
-*/
-
-
-enum Mode {
-    case Normal
-    case RepeatEach
-    case RepeatAll
+protocol Mixer {
+    func newSongs(songs: [String]) -> [String]
 }
 
-class RepeatEachMode {
+class DJ: Mixer {
     func newSongs(songs: [String]) -> [String] {
+        return [
+            "Ice Ice Baby",
+            "No Woman No Cry",
+            "Another Brick In The Wall"
+        ]
+    }
+}
+
+class Mode: Mixer {
+    func newSongs(songs: [String]) -> [String] {
+        return songs
+    }
+}
+
+class RepeatEachMode: Mode {
+    override func newSongs(songs: [String]) -> [String] {
         var repeated = [String]()
         for song in songs {
             repeated.append(song)
@@ -22,9 +29,15 @@ class RepeatEachMode {
     }
 }
 
-class RepeatAllMode {
-    func newSongs(songs: [String]) -> [String] {
+class RepeatAllMode: Mode {
+    override func newSongs(songs: [String]) -> [String] {
         return songs + songs
+    }
+}
+
+class ReverseMode: Mode {
+    override func newSongs(songs: [String]) -> [String] {
+        return songs.reverse()
     }
 }
 
@@ -35,24 +48,22 @@ class Jukebox {
         "Love Yourself"
     ]
     
-    func play(mode: Mode) -> String {
-        switch mode {
-        case .Normal:
-            break
-            
-        case .RepeatEach:
-            self.songs = RepeatEachMode().newSongs(self.songs)
-            
-        case .RepeatAll:
-            self.songs = RepeatAllMode().newSongs(self.songs)
-        }
+    func play(mixer: Mixer) -> String {
+        self.songs = mixer.newSongs(self.songs)
         
         return self.songs.joinWithSeparator("\n")
     }
 }
 
-Jukebox().play(.Normal)
+Jukebox().play(DJ())
 
-Jukebox().play(.RepeatEach)
 
-Jukebox().play(.RepeatAll)
+Jukebox().play(Mode())
+
+Jukebox().play(RepeatEachMode())
+
+Jukebox().play(RepeatAllMode())
+
+Jukebox().play(ReverseMode())
+
+
