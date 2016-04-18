@@ -1,3 +1,10 @@
+enum Mode {
+    case Normal
+    case RepeatEach
+    case RepeatAll
+}
+
+
 class Jukebox {
     private var songs = [
         "Work",
@@ -5,20 +12,30 @@ class Jukebox {
         "Love Yourself"
     ]
     
-    func play(repeatEach: Bool) -> String {
-        if repeatEach {
+    func play(mode: Mode) -> String {
+        switch mode {
+        case .Normal:
+            break
+            
+        case .RepeatEach:
             var newSongs = [String]()
             for song in self.songs {
                 newSongs.append(song)
                 newSongs.append(song)
             }
             self.songs = newSongs
+            
+        case .RepeatAll:
+            self.songs = self.songs + self.songs
+            
         }
         
         return self.songs.joinWithSeparator("\n")
     }
 }
 
-Jukebox().play(true)
+Jukebox().play(.Normal)
 
-Jukebox().play(false)
+Jukebox().play(.RepeatEach)
+
+Jukebox().play(.RepeatAll)
